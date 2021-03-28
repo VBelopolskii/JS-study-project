@@ -110,20 +110,39 @@ delete headPerson.family;
 
 headPerson.familySize = family.length;
 
-function sumFamilyAge(arr) {
-    let sumAge = 0;
+// function sumFamilyAge(arr) {
+//     let sumAge = 0;
+//
+//     for (let i = 0; i < arr.length; i++) {
+//         sumAge += arr[i].age;
+//     }
+//     return sumAge;
+// }
+//
+//
+// headPerson.totalFamilyAge = sumFamilyAge(family);
 
-    for (let i = 0; i < arr.length; i++) {
-        sumAge += arr[i].age;
-    }
-    return sumAge;
-}
+
+Object.defineProperty(headPerson, "totalFamilyAge", {
+    get() {
+        let sumAge = 0;
+
+        for (let i = 0; i < family.length; i++) {
+            sumAge += family[i].age;
+        }
+        return sumAge;
+    },
+    set(value) {
+        this.totalFamilyAge = value;
+    },
+    configurable: true,
+    enumerable: true,
+});
 
 
-headPerson.totalFamilyAge = sumFamilyAge(family);
+console.log(headPerson.totalFamilyAge);
+console.log(Object.keys(headPerson).length);
 
-
-// headPerson.totalFamilyAge = 140;
 
 // Sorting the array of the objects
 
@@ -145,6 +164,8 @@ sortByAge(family);
 eyeColors.forEach(function(item, i, arr) {
     arr[i] = {eyeColor: item};
 });
+
+
 
 /// Немного тестов, если упали то будет соответствующий лог
 console.assert(family.length === 4, printMsg({obj: family.length, errorMsg: 'Check family size'}))
