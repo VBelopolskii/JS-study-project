@@ -1,11 +1,14 @@
 // 'use strict';
 //=================== 1 ======================
-const arr1 = ['a', 'c', 'b'];
+let arr1 = ['a', 'c', 'b'];
 const arr2 = ['b', 'c', 'a'];
 
+
 // Why do errors happen?
-console.assert(arr1.sort() !== arr1, printMsg({errorMsg: 'Should be equal.'}))
-console.assert(arr1.sort() === arr2.sort(), printMsg({errorMsg: 'Should not be equal.'}))
+// sort() сортирует сам массив, и возврашает отсортированный массив, НЕ копию!
+// console.assert(arr1.sort() !== arr1, printMsg({errorMsg: 'Should be equal.'}))
+// === сравнивает массивы по ссылке, а не по значению
+// console.assert(arr1.sort() === arr2.sort(), printMsg({errorMsg: 'Should not be equal.'}))
 
 //=================== 2 ======================
 
@@ -19,23 +22,32 @@ const obj = {
 Object.freeze(obj);
 const value = 9999;
 obj.value = value; // Do uncomment the first line of the file - 'use strict'. Why does the error happen?
+// В любом случае, значение obj.value не изменится из-за freeze. Но в use strict mode в консоль бросается exception,
+// а при выключенном режиме - интерпретатор JS молча игнорирует эту ошибку
 
 const someValue = 'new value';
 obj.someOtherValue.value = someValue;
 
 // Why do errors happen?
-console.assert(obj.value === value, printMsg({errorMsg: 'value. Should not be equal.'}))
-console.assert(obj.someOtherValue.value !== someValue, printMsg({errorMsg: 'someOtherValue. Should be equal.'}))
+// В первом случае из-за того, что свойства объекта obj заморожены
+// Во втором случае из-за того что заморозка неглубокая и не влияет на свойста значений-объектов
+// console.assert(obj.value === value, printMsg({errorMsg: 'value. Should not be equal.'}))
+// console.assert(obj.someOtherValue.value !== someValue, printMsg({errorMsg: 'someOtherValue. Should be equal.'}))
 
 
 //=================== 3 ======================
 const arrObj1 = [{ firstName: 'Test' }];
 // инициализируем второй массив, содержимое - нулевой элемент первого массива
+// Не могу разобраться. Перепробовал все способы инициализации массива, но все равно происходит копирование по ссылке
 const arrObj2 = [arrObj1[0]];
 
 arrObj2[0].firstName = 'Blabla';
 
+console.log("arrObj2", arrObj2);
+console.log("arrObj1", arrObj1);
+
 //Почему ошибка и как пофиксить?
+// Ошибка потому, что копирование происходит по ссылке.
 console.assert(arrObj1[0].firstName === 'Test', printMsg({errorMsg: 'firstName. Should not be equal.'}))
 
 
